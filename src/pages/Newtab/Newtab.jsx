@@ -17,7 +17,7 @@ const Newtab = () => {
           target="_blank"
           rel="noopener noreferrer"
         >
-          Learn React!
+          你大哥来练手了呀
         </a>
         <h6>The color of this paragraph is defined using SASS.</h6>
       </header>
