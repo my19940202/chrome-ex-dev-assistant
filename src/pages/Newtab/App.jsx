@@ -22,17 +22,23 @@ export default () => {
         <Layout style={{height: '100vh'}}>
             <Sider trigger={null} collapsible collapsed={collapsed}>
                 <Menu theme="dark" mode="inline"
-                    defaultSelectedKeys={['1']}
+                    defaultSelectedKeys={['0']}
                     onClick={handleClick}
                 >
+                    <Menu.Item key="0">
+                        <BookOutlined /><Link to='/bookmark'>我的书签</Link>
+                    </Menu.Item>
                     <Menu.Item key="1">
                         <VideoCameraOutlined /><Link to='/'>概览</Link>
                     </Menu.Item>
                     <Menu.Item key="2">
-                        <UserOutlined /><Link to='/about'>文件系统</Link>
+                        <UserOutlined /><Link to='/about'>关于</Link>
                     </Menu.Item>
                     <Menu.Item key="3">
-                        <BookOutlined /><Link to='/xx'>书签</Link>
+                        <UserOutlined /><Link to='/dida'>嘀嗒顺风车看板</Link>
+                    </Menu.Item>
+                    <Menu.Item key="3">
+                        <UserOutlined /><Link to='/dida'>监控网络数据看板</Link>
                     </Menu.Item>
                 </Menu>
             </Sider>
