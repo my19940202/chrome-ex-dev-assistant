@@ -5,7 +5,7 @@ export const Home = () => {
     const [collapsed, setCollapsed] = useState(false);
     return (
         <div>
-            Home
+            主页
         </div>
     );
 };

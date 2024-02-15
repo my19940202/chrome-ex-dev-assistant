@@ -1,6 +1,19 @@
 .ant-menu-title-content .anticon {
     padding-right: 15px;
 }
+.bookmak {
+    display: flex;
+}
+.bookmak > div {
+    width: 50%;
+}
 .bookmak .ant-image {
     margin-right: 10px;
+}
+.bookmak-wrapper, .history-wrapper {
+    border: 1px solid #ddd;
+    border-radius: 5px;
+}
+.history-wrapper {
+    border-left: none;
 }

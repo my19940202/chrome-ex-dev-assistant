@@ -5,7 +5,7 @@ export const About = () => {
     const [collapsed, setCollapsed] = useState(false);
     return (
         <div>
-            About
+            搞个啥子功能呢
         </div>
     );
 };
