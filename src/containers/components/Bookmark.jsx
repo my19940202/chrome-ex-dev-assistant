@@ -72,7 +72,6 @@ export const Bookmark = () => {
         }).catch(err => console.log(err));
 
         getHistory(({text: '', startTime: oneWeekAgo, maxResults: 999})).then(result => {
-            console.log(result, 'result');
             setHistoryList(result);
         }).catch(err => console.log(err));
         return () => {

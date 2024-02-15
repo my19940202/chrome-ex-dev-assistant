@@ -17,3 +17,8 @@
 .history-wrapper {
     border-left: none;
 }
+/* echart-wrapper */
+#echart-wrapper {
+    width: 100%;
+    height: 500px;
+}
