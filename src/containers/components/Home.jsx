@@ -7,8 +7,25 @@ import {CalendarOutlined} from '@ant-design/icons';
 
 const {Link, Title} = Typography;
 
+// time日期毫秒数
+function dayTimeMapValue(time) {
+    // 过去映射为0 未来映射为1
+    const today = +new Date();
+    let span = +new Date(time) > today ? 1 : 0;
+    // 周末映射为2: 0 6
+    if (new Date(time).getDay() % 6 === 0) {
+        span = 2;
+    }
+    // 今天映射为3
+    const gap = (3600 * 24 * 1000);
+    if (Math.floor(time / gap) + 1 === Math.floor(today / gap)) {
+        span = 3;
+    }
+
+    return span;
+}
+
 export const Home = () => {
-    const [collapsed, setCollapsed] = useState(false);
     const year = new Date().getFullYear();
 
     useEffect(() => {
@@ -21,10 +38,9 @@ export const Home = () => {
             const dayTime = 3600 * 24 * 1000;
             const data = [];
             for (let time = date; time <= end; time += dayTime) {
-                console.log(+new Date(time), +new Date());
                 data.push([
                     echarts.time.format(time, '{yyyy}-{MM}-{dd}', false),
-                    +new Date(time) > +new Date() ? 0 : 1
+                    dayTimeMapValue(time)
                 ]);
             }
             return data;
@@ -33,9 +49,14 @@ export const Home = () => {
             visualMap: {
                 show: false,
                 min: 0,
-                max: 1,
+                max: 3,
                 inRange: {
-                    color: ['#B6E3FF', '#39d353']
+                    color: [
+                        '#26a641', // before
+                        '#B6E3FF', // after
+                        '#39d353', // weekend
+                        '#f53f3f' // today
+                    ]
                 },
             },
             calendar: {

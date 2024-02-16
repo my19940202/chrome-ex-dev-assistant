@@ -1,12 +1,15 @@
 // 浏览器书签页面(全屏显示所有书签 便于回顾和整体review)
 import React, {useState, useEffect} from 'react';
-import {Typography, Image, Spin} from 'antd';
+import {Typography, Image, Spin, Input, Space, Button} from 'antd';
 import {get} from 'lodash';
 import { FixedSizeList } from 'react-window';
 import * as moment from 'moment';
 import {
-    ClockCircleOutlined, HistoryOutlined, BookOutlined, ReadOutlined
+    ClockCircleOutlined, HistoryOutlined, BookOutlined, ReadOutlined,
+    SearchOutlined, ArrowUpOutlined, ArrowDownOutlined
 } from '@ant-design/icons';
+
+const { Search } = Input;
 const {Link, Title} = Typography;
 const microsecondsPerWeek = 1000 * 60 * 60 * 24 * 7;
 const oneWeekAgo = new Date().getTime() - microsecondsPerWeek;
@@ -57,6 +60,7 @@ export const Bookmark = () => {
     // 示例格式: https://www.bilibili.com/favicon.ico
     const [bookmarkList, setBookmarkList] = useState([]);
     const [historyList, setHistoryList] = useState([]);
+    const [newHistoryList, setNewHistoryList] = useState([]);
     const [loading, setLoading] = useState(true);
 
     // 获取chrome里面的书签数据，并结构化处理
@@ -73,6 +77,7 @@ export const Bookmark = () => {
 
         getHistory(({text: '', startTime: oneWeekAgo, maxResults: 999})).then(result => {
             setHistoryList(result);
+            setNewHistoryList(result);
         }).catch(err => console.log(err));
         return () => {
             ignore = true;
@@ -85,28 +90,49 @@ export const Bookmark = () => {
             textWrap: 'nowrap',
             ...style
         };
-        const curr = historyList[index];
+        const curr = newHistoryList[index];
         let data = {
-            title: curr.title,
+            title: curr.title.slice(0, 35),
             page_url: curr.url,
             icon_url: formatIconUrl(curr.url),
             time: moment(curr.lastVisitTime).format("MM-DD HH:mm:ss"),
             visit: curr.visitCount
         }
         return (
-            <div style={style}>
-                <Link href={data.page_url} target="_blank">
-                    <ClockCircleOutlined style={{margin: '0 5px'}} /> {data.time}
-                    <ReadOutlined style={{margin: '0 5px'}} /> {data.visit}次
-                    <Image preview={false} style={{margin: '0 5px'}} width={20} src={data.icon_url} fallback='https://dummyimage.com/20.png/ddd/fff' />
-                    {data.title}
+            <div style={style} key={curr.id}>
+                <Link href={data.page_url} target="_blank" style={{display: 'flex'}}>
+                    <div style={{width: 200}}>
+                        <ClockCircleOutlined style={{margin: '0 5px'}} /> {data.time}
+                        <ReadOutlined style={{margin: '0 5px'}} /> {data.visit}次
+                    </div>
+                    <div>
+                        <Image preview={false} style={{margin: '0 5px'}} width={20} src={data.icon_url} fallback='https://dummyimage.com/20.png/ddd/fff' />
+                        {data.title}
+                    </div>
                 </Link>
             </div>
         );
     };
 
+    const onSearch = (value) => {
+        setNewHistoryList(historyList.filter(({title, url}) =>
+            title.includes(value) || url.includes(value)
+        ));
+    };
+
+    const setOrder = (order) => {
+        let newArr = newHistoryList.sort((a, b) => {
+            if (order === 'time') {
+                return b.lastVisitTime - a.lastVisitTime;
+            } else if (order === 'visit') {
+                return b.visitCount - a.visitCount;
+            }
+        });
+        setNewHistoryList([...newArr]);
+    }
+
     return (
-        <div class="bookmak">
+        <div className="bookmak">
             <div>
                 <Title><BookOutlined /> 书签</Title>
                 <div className='bookmak-wrapper'>
@@ -117,10 +143,19 @@ export const Bookmark = () => {
             </div>
             <div>
                 <Title><HistoryOutlined /> 历史-最近一周访问记录{historyList.length}条</Title>
+                <Space direction="horizontal" style={{margin: '0 0 8px 8px'}}>
+                    <Search placeholder="搜索" onSearch={onSearch} style={{ width: 200 }} />
+                    <Button type="primary" style={{ width: 80 }} onClick={() => setOrder('visit')}>
+                        访问次数
+                    </Button>
+                    <Button type="primary" style={{ width: 80 }} onClick={() => setOrder('time')}>
+                        时间顺序
+                    </Button>
+                </Space>
                 <FixedSizeList
                     className='history-wrapper'
                     height={700} // 列表的总高度
-                    itemCount={historyList.length}
+                    itemCount={newHistoryList.length}
                     itemSize={30}
                     width="100%"
                 >
