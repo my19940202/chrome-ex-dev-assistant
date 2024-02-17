@@ -38,7 +38,7 @@ export default () => {
                         <UserOutlined /><Link to='/dida'>嘀嗒</Link>
                     </Menu.Item>
                     <Menu.Item key="4">
-                        <UserOutlined /><Link to='/dida'>其他</Link>
+                        <UserOutlined /><Link to='/other'>其他</Link>
                     </Menu.Item>
                 </Menu>
             </Sider>

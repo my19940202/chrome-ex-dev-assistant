@@ -5,9 +5,9 @@ import {get} from 'lodash';
 import { FixedSizeList } from 'react-window';
 import * as moment from 'moment';
 import {
-    ClockCircleOutlined, HistoryOutlined, BookOutlined, ReadOutlined,
-    SearchOutlined, ArrowUpOutlined, ArrowDownOutlined
+    ClockCircleOutlined, HistoryOutlined, BookOutlined, ReadOutlined
 } from '@ant-design/icons';
+import {formatIconUrl} from '../util';
 
 const { Search } = Input;
 const {Link, Title} = Typography;
@@ -15,15 +15,6 @@ const microsecondsPerWeek = 1000 * 60 * 60 * 24 * 7;
 const oneWeekAgo = new Date().getTime() - microsecondsPerWeek;
 const getTreeData = chrome.bookmarks.getTree();
 const getHistory = chrome.history.search;
-
-const formatIconUrl = (str) => {
-    const match = /^https?:\/\/[\w-.]+(:\d+)?/i.exec(str);
-    if (match) {
-        return match[0] + '/favicon.ico';
-    } else {
-        return null;
-    }
-}
 
 const List = ({data = []}) => {
     return (
@@ -134,7 +125,7 @@ export const Bookmark = () => {
     return (
         <div className="bookmak">
             <div>
-                <Title><BookOutlined /> 书签</Title>
+                <Title><BookOutlined />书签</Title>
                 <div className='bookmak-wrapper'>
                     <Spin spinning={loading}>
                         <List data={bookmarkList} />
@@ -154,7 +145,7 @@ export const Bookmark = () => {
                 </Space>
                 <FixedSizeList
                     className='history-wrapper'
-                    height={700} // 列表的总高度
+                    height={700}
                     itemCount={newHistoryList.length}
                     itemSize={30}
                     width="100%"
